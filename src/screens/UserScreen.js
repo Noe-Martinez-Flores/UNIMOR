@@ -6,8 +6,6 @@ import { Button } from "react-native-elements";
 
 const UserScreen = ({navigation, setStateUser, userInfo, conter, setUserInfo}) => {
 
-
-
   const deleteAccount = async () => {
    
     try {

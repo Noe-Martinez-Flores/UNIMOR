@@ -1,37 +1,74 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { FakePicture } from "../data/FakePictures";
+
+import { useNavigation } from '@react-navigation/native';
 
 const InfoData = ({navigation}) => {
 
-    const Base = (props) => {
+  const [companies, setCompanies] = useState([])
+
+  useEffect(() => {
+    getCompanies('http://192.168.69.14:8090/company/all')   
+  }, [useNavigation])
+  
+
+  const getCompanies =  async (url) => {
+    try {
+      const response = await fetch(url,{
+        method : 'GET',
+        headers : {'Content-Type' : 'application/json'}
+      })
+
+      const json = await response.json();
+      
+      setCompanies(json.data.content)
+
+      const prueba = JSON.stringify(response)
+      console.log('---------------------------------------------------------')
+      console.log(companies)
+        
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  
+
+    const Base = ({item, index}) => {
         return (
-            <TouchableOpacity
+          <>
+            {item.status && (
+               <TouchableOpacity
+               key={index}
               style={styles.rectanguleCompany}
               onPress={() => navigation.navigate('infoPressArea',{
-                image : props.image,
-                nombre : props.nombre
+                image : item.photos[0].name,
+                nombre : item.name,
+                data : item
               })}
             >
               <Image
+                key={index}
                 style={styles.rectanguleInside}
-                source={{ uri: props.image }}
+                source={{ uri: item.photos[0].name }}
               ></Image>
-              <Text style={styles.rectanguleText}>{props.nombre}</Text>
+              <Text style={styles.rectanguleText}>{item.name}</Text>
+              <Text style = {{marginStart : 15, marginTop : 2}}>{item.description}</Text>
             </TouchableOpacity>
+            )}
+          </>
+           
           );
     }
    
     return (
-        <FlatList
+         <FlatList
         ListHeaderComponent={
             <Text style={styles.mainText}>Listado General</Text>
         }
-        data={FakePicture}
+        data={companies}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Base image={item.url} nombre={item.nombre} />
-        )}
+        renderItem={Base}
         ListFooterComponent = {
             <View style={styles.footer}></View>
         }

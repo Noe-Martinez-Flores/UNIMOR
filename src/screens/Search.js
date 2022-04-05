@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { Icon, Input, SearchBar } from 'react-native-elements'
 //import { useNavigation } from '@react-navigation/native'
@@ -12,7 +12,7 @@ const Search = ({navigation}) => {
   const [filterData, setFilterData] = useState([])
 
   useEffect(() => {
-    getUsers('https://randomuser.me/api/?results=20');
+    getUsers('http://192.168.69.14:8090/company/all');
 }, [navigation])
 
   // useEffect(() => {
@@ -30,9 +30,9 @@ const Search = ({navigation}) => {
     try {
     const response = await fetch (url);
     const json = await response.json();
-    setData(json.results);
-    setFilterData(json.results);
-    console.log(json.results)
+    setData(json.data.content);
+    setFilterData(json.data.content);
+    console.log(json.data.content)
     }catch (error){
       console.log(error)
     }
@@ -41,7 +41,7 @@ const Search = ({navigation}) => {
   const searchFilterFunction = (text) => {
     if  (text){
       const newData = data.filter(item=>{
-        const itemData = item.name.first ? item.name.first.toUpperCase() : ''.toUpperCase();
+        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       })
@@ -70,15 +70,28 @@ const Search = ({navigation}) => {
       {
         filterData.map((item,index)=>{
           return (
-            <View key = {index} style = {styles.itemContainer}>
-              <Image 
-                source={{uri : item.picture.large}}
-                style = {styles.image}
-              />
-              <View>
-                <Text style = {styles.textName} > {item.name.first} {item.name.last}</Text>
-              </View>  
-            </View>
+            <>
+              {item.status && (
+                <TouchableOpacity
+               key={index}
+              style={styles.rectanguleCompany}
+              onPress={() => navigation.navigate('infoPressArea',{
+                image : item.photos.name,
+                nombre : item.name,
+                data : item
+              })}
+            >
+              <Image
+                key={index}
+                style={styles.rectanguleInside}
+                source={{ uri: item.photos[0].name }}
+              ></Image>
+              <Text style={styles.rectanguleText}>{item.name}</Text>
+              <Text style = {{marginStart : 15, marginTop : 2}}>{item.description}</Text>
+            </TouchableOpacity>
+            
+              )}
+            </>
             
           )
         })
@@ -115,5 +128,23 @@ const styles = StyleSheet.create({
     },
     footer : {
       marginBottom : 85
-    }
+    },
+    rectanguleCompany: {
+      marginHorizontal: 15,
+      backgroundColor: "#DCDCDC",
+      height: 200,
+      marginTop: 20,
+      marginBottom: 20,
+      borderRadius: 15,
+    },
+    rectanguleInside: {
+      height: "70%",
+      width: "100%",
+      borderRadius: 15,
+    },
+    rectanguleText: {
+      marginLeft: 15,
+      fontSize: 20,
+      fontWeight: "bold",
+    },
 })

@@ -14,15 +14,7 @@ import { FakePicture } from "../data/FakePictures";
 import InfoData from "../components/InfoData";
 
 export default function Home({navigation}) {
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  const getUser = async () => {
-    const user = await axios.get("https://randomuser.me/api/");
-    //console.log(user)
-  };
-
+  
   return (
     <View>
       {/* <SafeAreaView style = {styles.container}>

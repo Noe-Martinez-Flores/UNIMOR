@@ -7,18 +7,19 @@ import MapsView from '../components/Maps';
 import Comments from '../components/Comments';
 
 const InfoPressAreaScreen = ({ route }) => {
-  const { image, nombre } = route.params;
+  const { image, nombre, data } = route.params;
 
   const ratingCompleted = (rating) => {
     console.log('rating is ' + rating)
   }
+
 
   const [isTouchFavourite, setIsTouchFavourite] = useState(false);
 
 
   return (
     <ScrollView>
-      <Text style={{ fontSize: 25, fontWeight: 'bold', justifyContent: 'center', alignSelf: 'center', marginTop : 5}}>{nombre}</Text>
+      <Text style={{ fontSize: 25, fontWeight: 'bold', justifyContent: 'center', alignSelf: 'center', marginTop : 5}}>{data.name}</Text>
       <View style={styles.rectanguleCompany}>
         <Image style={styles.rectanguleInside} source={{ uri: image }}></Image>
       </View>
@@ -32,10 +33,10 @@ const InfoPressAreaScreen = ({ route }) => {
         </View>
       </View>
       <View style={styles.description}>
-        <Text>En compañía del mago Gandalf y de trece enanos, el hobbit Bilbo Bolsón emprende un viaje a través del país de los elfos y los bosques de los trolls, desde las mazmorras de los orcos hasta la Montaña Solitaria, donde el dragón Smaug esconde el tesoro de los Enanos.</Text>
+        <Text>{data.description}</Text>
       </View>
       <MapsView/>
-      <Comments/>
+      <Comments data = {data}/>
 
       <View style = {{marginBottom : 300}}></View>
 
