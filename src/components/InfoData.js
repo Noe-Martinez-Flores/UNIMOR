@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View , RefreshControl, SafeAreaView, ScrollView} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { FakePicture } from "../data/FakePictures";
 
@@ -11,13 +11,23 @@ const InfoData = ({navigation}) => {
   const [companies, setCompanies] = useState([])
   const [picture, setPicture] = useState(null)
   const [image, setimage] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
-    getCompanies('http://192.168.0.20:8090/company/all')  
+    getCompanies('http://192.168.110.119:8090/company/all')  
     navigation.navigate('mainHome') 
     // getPicture('http://192.168.0.20:8090/company/image/');
-  }, [useNavigation])
+  }, [refreshing])
   
+  
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+  const onRefresh = () => {
+      setRefreshing(true);
+      wait(1000).then(()=>setRefreshing(false))
+  }
 
   const getCompanies =  async (url) => {
     try {
@@ -73,6 +83,7 @@ const InfoData = ({navigation}) => {
             }).catch(error=>console.log(error+'error ocurrido'))} */}
             {/* {setPicture(item.photos[0].name)} */}
             {/* <Text>{item.photos[0].name}</Text> */}
+            
               <Image
                 style={styles.rectanguleInside}
                 source={{ uri: item.photos[0].name }}
@@ -87,7 +98,18 @@ const InfoData = ({navigation}) => {
     }
    
     return (
-         <FlatList
+      <>
+         <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <FlatList
         ListHeaderComponent={
             <Text style={styles.mainText}>Listado General</Text>
         }
@@ -98,6 +120,12 @@ const InfoData = ({navigation}) => {
             <View style={styles.footer}></View>
         }
       />
+      </ScrollView>
+    </SafeAreaView>
+
+         
+      </>
+     
     )
     
   };

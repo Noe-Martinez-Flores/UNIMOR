@@ -12,7 +12,7 @@ const Search = ({navigation}) => {
   const [filterData, setFilterData] = useState([])
 
   useEffect(() => {
-    getUsers('http://192.168.0.20:8090/company/all');
+    getUsers('http://192.168.110.119:8090/company/all');
 }, [navigation])
 
   // useEffect(() => {

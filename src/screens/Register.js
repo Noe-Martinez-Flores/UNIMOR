@@ -20,6 +20,7 @@ export default function Register({navigation}) {
   )
 }
 
+
 const styles = StyleSheet.create({
   container : {
     backgroundColor : "#8DCDFF",
