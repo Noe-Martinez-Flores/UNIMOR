@@ -1,12 +1,20 @@
 import { StyleSheet, Text, View, Image, ScrollView, ToastAndroid } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import InfoData from '../components/InfoData'
 import { Rating, RatingProps, Overlay } from 'react-native-elements'
 import { MaterialIcons } from "@expo/vector-icons";
 import MapsView from '../components/Maps';
 import Comments from '../components/Comments';
+import { useNavigation } from '@react-navigation/native';
 
 const InfoPressAreaScreen = ({ route }) => {
+
+  const navigation = useNavigation();
+
+
+  
+
+
   const { image, nombre, data } = route.params;
   const [isModalOpen, setIsModalOpen] = useState(false)
 

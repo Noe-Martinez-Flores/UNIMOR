@@ -6,12 +6,15 @@ import { useNavigation } from '@react-navigation/native';
 
 const InfoData = ({navigation}) => {
 
+  const navigations = useNavigation();
+
   const [companies, setCompanies] = useState([])
   const [picture, setPicture] = useState(null)
   const [image, setimage] = useState(null)
 
   useEffect(() => {
-    getCompanies('http://192.168.0.20:8090/company/all')   
+    getCompanies('http://192.168.0.20:8090/company/all')  
+    navigation.navigate('mainHome') 
     // getPicture('http://192.168.0.20:8090/company/image/');
   }, [useNavigation])
   

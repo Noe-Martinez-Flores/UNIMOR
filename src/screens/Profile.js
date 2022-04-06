@@ -5,6 +5,8 @@ import Bottom from '../components/Bottom'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserScreen from './UserScreen'
 import {Button} from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 
 export default function Profile({navigation}) {
 
@@ -15,11 +17,11 @@ export default function Profile({navigation}) {
   const [userInfo, setUserInfo] = useState([])
   const [conter, setConter] = useState(null)
 
-  console.log('user state -> '+stateUser)
+  // console.log('user state -> '+stateUser)
 
 
   useEffect(() => {
-    getUser('https://randomuser.me/api/?results=5')
+    // getUser('http://localhost:8090/user/login')
   }, [])
   
   useEffect(()=>{
@@ -87,36 +89,58 @@ export default function Profile({navigation}) {
 
   const authSession = async (inputValor, valuesAPI) => {
             
-    for (let i = 0; i < valuesAPI.info.results; i++) {
+    // for (let i = 0; i < valuesAPI.info.results; i++) {
 
-     if (inputValor.username ===  valuesAPI.results[i].login.username && inputValor.password === valuesAPI.results[i].login.password){
-        console.log('login Success')
-        setStateUser(true);
-        setConter(i);
-        setUserInfo(valuesAPI.results[i])
-        try {
-          const json = JSON.stringify(valuesAPI.results[i]);
-          await AsyncStorage.setItem('@storage_key',json)
+    //  if (inputValor.username ===  valuesAPI.results[i].login.username && inputValor.password === valuesAPI.results[i].login.password){
+    //     console.log('login Success')
+    //     setStateUser(true);
+    //     setConter(i);
+    //     setUserInfo(valuesAPI.results[i])
+    //     try {
+    //       const json = JSON.stringify(valuesAPI.results[i]);
+    //       await AsyncStorage.setItem('@storage_key',json)
           
-        } catch (e) {
-          console.log(e)
-        }
-        setUserInfo(valuesAPI.results[i])
-        break;
+    //     } catch (e) {
+    //       console.log(e)
+    //     }
+    //     setUserInfo(valuesAPI.results[i])
+    //     break;
         
-     }else{
+    //  }else{
       
-      //  ToastAndroid.show('Usuario y / o Contraseña Incorrectos', ToastAndroid.SHORT)
-       console.log(inputValor.username + ' = ' + valuesAPI.results[i].login.username)
-       console.log(inputValor.password + ' = ' + valuesAPI.results[i].login.password)
-       setStateUser(false);
+    //   //  ToastAndroid.show('Usuario y / o Contraseña Incorrectos', ToastAndroid.SHORT)
+    //    console.log(inputValor.username + ' = ' + valuesAPI.results[i].login.username)
+    //    console.log(inputValor.password + ' = ' + valuesAPI.results[i].login.password)
+    //    setStateUser(false);
    
-     }
+    //  }
 
       
+    // }
+
+    try {
+        // const response = await fetch('http://192.168.0.20:8090/user/login',{
+        //   method : 'POST',
+        //   headers : {'Content-Type' : 'application/json'},
+        //   body : inputValor
+        // })
+
+        const response = await axios.post('http://192.168.0.20:8090/user/login',{
+          email : inputValor.email,
+          password : inputValor.password
+        })
+
+        console.log(inputValor)
+      
+        console.log(response.data)
+
+        return response.status !== false ? (console.log('success')) : (console.log('something went wrong'))
+    } catch (error) {
+      console.log('error mostrado ->'+error)
     }
 
-    return stateUser ? console.log('succes!!!') : ToastAndroid.show('Usuario y / o Contraseña Incorrectos', ToastAndroid.SHORT)
+    // return stateUser ? console.log('succes!!!') : ToastAndroid.show('Usuario y / o Contraseña Incorrectos', ToastAndroid.SHORT)
+   
 
   }
 
@@ -160,7 +184,7 @@ if(!stateUser){
 
 function defaultValues () {
   return {
-    username : "",
+    email : "",
     password : ""
   
   }

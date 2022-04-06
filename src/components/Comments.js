@@ -10,7 +10,7 @@ export default function Comments({ data }) {
     setVisible(!visible);
   };
 
-  console.log(data);
+
   const datos = [
     {
       name: "usuario1",
@@ -26,7 +26,6 @@ export default function Comments({ data }) {
     },
   ];
 
-  console.log(datos);
 
   const modal = () => {
     return (

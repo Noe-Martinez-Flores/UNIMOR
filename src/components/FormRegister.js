@@ -20,7 +20,7 @@ const FormRegister = ({setData}) => {
           ></Icon>
           
         }
-        onChange = {(event) => setData("username", event.nativeEvent.text)}
+        onChange = {(event) => setData("email", event.nativeEvent.text)}
       />
 
       <Input
