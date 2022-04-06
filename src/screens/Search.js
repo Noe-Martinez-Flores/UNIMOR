@@ -12,7 +12,7 @@ const Search = ({navigation}) => {
   const [filterData, setFilterData] = useState([])
 
   useEffect(() => {
-    getUsers('http://192.168.69.14:8090/company/all');
+    getUsers('http://192.168.0.20:8090/company/all');
 }, [navigation])
 
   // useEffect(() => {
@@ -37,6 +37,8 @@ const Search = ({navigation}) => {
       console.log(error)
     }
   }
+
+
 
   const searchFilterFunction = (text) => {
     if  (text){
@@ -82,7 +84,6 @@ const Search = ({navigation}) => {
               })}
             >
               <Image
-                key={index}
                 style={styles.rectanguleInside}
                 source={{ uri: item.photos[0].name }}
               ></Image>

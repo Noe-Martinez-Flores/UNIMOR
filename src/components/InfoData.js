@@ -7,9 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 const InfoData = ({navigation}) => {
 
   const [companies, setCompanies] = useState([])
+  const [picture, setPicture] = useState(null)
+  const [image, setimage] = useState(null)
 
   useEffect(() => {
-    getCompanies('http://192.168.69.14:8090/company/all')   
+    getCompanies('http://192.168.0.20:8090/company/all')   
+    // getPicture('http://192.168.0.20:8090/company/image/');
   }, [useNavigation])
   
 
@@ -32,12 +35,25 @@ const InfoData = ({navigation}) => {
         console.log(error)
     }
   }
+
+  // const getPicture = async (url) => {
+  //   try {
+  //     const response = await fetch(url+picture,{
+  //       method : 'GET',
+  //       headers : {'Content-Type' : 'application/json'}
+  //     })
+  //     setimage(response)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
   
 
     const Base = ({item, index}) => {
         return (
           <>
             {item.status && (
+
                <TouchableOpacity
                key={index}
               style={styles.rectanguleCompany}
@@ -47,8 +63,14 @@ const InfoData = ({navigation}) => {
                 data : item
               })}
             >
+            {console.log(item+'item original')}
+            {/* {fetch('http://192.168.0.20:8090/company/image/'+item.photos[0].name).then(resp=>{
+              console.log(resp);
+              setPicture(resp);
+            }).catch(error=>console.log(error+'error ocurrido'))} */}
+            {/* {setPicture(item.photos[0].name)} */}
+            {/* <Text>{item.photos[0].name}</Text> */}
               <Image
-                key={index}
                 style={styles.rectanguleInside}
                 source={{ uri: item.photos[0].name }}
               ></Image>

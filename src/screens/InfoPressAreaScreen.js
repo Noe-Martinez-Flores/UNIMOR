@@ -1,21 +1,25 @@
 import { StyleSheet, Text, View, Image, ScrollView, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import InfoData from '../components/InfoData'
-import { Rating, RatingProps } from 'react-native-elements'
+import { Rating, RatingProps, Overlay } from 'react-native-elements'
 import { MaterialIcons } from "@expo/vector-icons";
 import MapsView from '../components/Maps';
 import Comments from '../components/Comments';
 
 const InfoPressAreaScreen = ({ route }) => {
   const { image, nombre, data } = route.params;
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const ratingCompleted = (rating) => {
     console.log('rating is ' + rating)
   }
 
-
+  console.log(data+'hola')
   const [isTouchFavourite, setIsTouchFavourite] = useState(false);
 
+
+
+    
 
   return (
     <ScrollView>
@@ -26,7 +30,7 @@ const InfoPressAreaScreen = ({ route }) => {
 
       <View style={styles.container}>
         <View>
-          <Rating style={styles.rating} startingValue={4} tintColor={"#f2f2f2"} minValue={0} onFinishRating={ratingCompleted} />
+          <Rating style={styles.rating} startingValue={4} tintColor={"#f2f2f2"} minValue={0}  onFinishRating={ratingCompleted}  />
         </View>
         <View>
           <MaterialIcons name='favorite' size={40} color={isTouchFavourite ? 'red' : 'gray'} onPress={() => (setIsTouchFavourite(!isTouchFavourite),isTouchFavourite ? "" : ToastAndroid.show('Añadido a Favoritos!',ToastAndroid.SHORT))} style={styles.favourite} />
@@ -35,8 +39,8 @@ const InfoPressAreaScreen = ({ route }) => {
       <View style={styles.description}>
         <Text>{data.description}</Text>
       </View>
-      <MapsView/>
-      <Comments data = {data}/>
+      <MapsView data = {data}/>
+      <Comments data = {data.comments}/>
 
       <View style = {{marginBottom : 300}}></View>
 
@@ -81,6 +85,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 20
   },
+  modal : {
+
+  }
   
 
 

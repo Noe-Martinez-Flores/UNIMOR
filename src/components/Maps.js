@@ -2,22 +2,22 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import MapView, { PROVIDER_GOOGLE , Marker} from 'react-native-maps';
 
-const MapsView = () => {
+const MapsView = ({data}) => {
   return (
     <View>
       <MapView
         style={styles.mapsContainer}
         provider={PROVIDER_GOOGLE}
         initialRegion={{
-          latitude: 18.96421857312373,
-          longitude: -99.23762258095566,
+          latitude: parseFloat(data.latitude),
+          longitude: parseFloat(data.altitude),
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-
+      
       > 
-        <Marker key={1} coordinate = {{latitude: 18.96421857312373,
-          longitude: -99.23762258095566}}></Marker>
+        <Marker key={data.id} coordinate = {{latitude: parseFloat(data.latitude),
+          longitude: parseFloat(data.altitude)}}></Marker>
       </MapView>
     </View>
   )
