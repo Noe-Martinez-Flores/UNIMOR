@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, RefreshControl} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { Icon, Input, SearchBar } from 'react-native-elements'
 //import { useNavigation } from '@react-navigation/native'
@@ -10,10 +10,20 @@ const Search = ({navigation}) => {
 
   const [data, setData] = useState([])
   const [filterData, setFilterData] = useState([])
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     getUsers('http://192.168.0.20:8090/company/all');
-}, [navigation])
+}, [refreshing])
+
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
+const onRefresh = () => {
+  setRefreshing(true);
+  wait(1000).then(() => setRefreshing(false));
+};
 
   // useEffect(() => {
   //   navigation.setOptions({
@@ -54,7 +64,13 @@ const Search = ({navigation}) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+    
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        
+      }
+    >
       {/* <Text style = {styles.mainText}>Search</Text> */}
       <Input
       color = {'007aff'}
@@ -128,7 +144,7 @@ const styles = StyleSheet.create({
       marginLeft : 10
     },
     footer : {
-      marginBottom : 85
+      marginBottom : 70
     },
     rectanguleCompany: {
       marginHorizontal: 15,

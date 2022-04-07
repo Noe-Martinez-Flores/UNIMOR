@@ -11,10 +11,6 @@ const InfoPressAreaScreen = ({ route }) => {
 
   const navigation = useNavigation();
 
-
-  
-
-
   const { image, nombre, data } = route.params;
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -22,12 +18,7 @@ const InfoPressAreaScreen = ({ route }) => {
     console.log('rating is ' + rating)
   }
 
-  console.log(data+'hola')
   const [isTouchFavourite, setIsTouchFavourite] = useState(false);
-
-
-
-    
 
   return (
     <ScrollView>
