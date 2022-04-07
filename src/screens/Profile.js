@@ -125,7 +125,7 @@ export default function Profile({navigation}) {
         //   body : inputValor
         // })
 
-        const response = await axios.post('http://192.168.110.119:8090/user/login',{
+        const response = await axios.post('http://192.168.0.20:8090/user/login',{
           email : inputValor.email,
           password : inputValor.password
         })

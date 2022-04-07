@@ -14,7 +14,7 @@ const InfoData = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
-    getCompanies('http://192.168.110.119:8090/company/all')  
+    getCompanies('http://192.168.0.20:8090/company/all')  
     navigation.navigate('mainHome') 
     // getPicture('http://192.168.0.20:8090/company/image/');
   }, [refreshing])
@@ -41,8 +41,8 @@ const wait = (timeout) => {
       setCompanies(json.data.content)
 
       const prueba = JSON.stringify(response)
-      console.log('---------------------------------------------------------')
-      console.log(companies)
+      // console.log('---------------------------------------------------------')
+      // console.log(companies)
         
     } catch (error) {
         console.log(error)
@@ -76,7 +76,7 @@ const wait = (timeout) => {
                 data : item
               })}
             >
-            {console.log(item+'item original')}
+            {/* {console.log(item+'item original')} */}
             {/* {fetch('http://192.168.0.20:8090/company/image/'+item.photos[0].name).then(resp=>{
               console.log(resp);
               setPicture(resp);

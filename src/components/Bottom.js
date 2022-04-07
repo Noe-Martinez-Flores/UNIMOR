@@ -9,9 +9,9 @@ const Bottom = ({navigation, authSession, inputValor, valuesAPI, userSatate, cat
   )
 }
 
-export const BottomRegister = ({navigation}) => {
+export const BottomRegister = ({navigation,validation,inputValor}) => {
     return (
-        <Button onPress = {()=>navigation.goBack()} title = "Registrarse" buttonStyle = {styles.sendBottomStyle} titleStyle = {styles.textBottom}></Button>
+        <Button onPress = {()=>(validation(inputValor), navigation.goBack())} title = "Registrarse" buttonStyle = {styles.sendBottomStyle} titleStyle = {styles.textBottom}></Button>
 
        )
 }

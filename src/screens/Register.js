@@ -5,6 +5,9 @@ import {BottomRegister} from '../components/Bottom'
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scrollview";
 
 export default function Register({navigation}) {
+
+
+
   
   return (
     <KeyboardAwareScrollView>
@@ -19,6 +22,10 @@ export default function Register({navigation}) {
     </KeyboardAwareScrollView>
   )
 }
+
+
+
+
 
 
 const styles = StyleSheet.create({
