@@ -9,7 +9,7 @@ export default function Top({navigation}) {
   const [topCompanies, setTopCompanies] = useState([])
   
   useEffect(() => {
-    getTopCompanies('http://192.168.0.20:8090/company/all/top');
+    getTopCompanies('http://192.168.111.214:8090/company/all/top');
   }, [refreshing])
 
   const wait = (timeout) => {
@@ -39,7 +39,7 @@ export default function Top({navigation}) {
             style={styles.rectanguleCompany}
             onPress={() =>
               navigation.navigate("infoPressArea", {
-                image: item.photos[0].name,
+                image: {uri:'http://192.168.111.214:8090/company/image/'+item.photos[0].name},
                 nombre: item.name,
                 data: item,
               })
@@ -47,7 +47,7 @@ export default function Top({navigation}) {
           >
             <Image
               style={styles.rectanguleInside}
-              source={{ uri: item.photos[0].name }}
+              source={{ uri: 'http://192.168.111.214:8090/company/image/'+item.photos[0].name }}
             ></Image>
             <Text style={styles.rectanguleText}>{item.name}</Text>
             <Text style={{ marginStart: 15, marginTop: 2 }}>

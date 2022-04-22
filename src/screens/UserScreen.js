@@ -3,16 +3,59 @@ import React, {useEffect, useRef, useState} from "react";
 import {Avatar} from 'react-native-elements'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button } from "react-native-elements";
+import instance from "../util/axios";
+import Loading from "../util/Loading";
 
-const UserScreen = ({navigation, setStateUser, userInfo, conter, setUserInfo}) => {
+const UserScreen = ({navigation, setisLogin, userInfo, conter, setUserInfo}) => {
+
+  const [ready, setReady] = useState(false);
+  const [change, setChange] = useState(false);
+
+  useEffect(async()=>{
+    await findUserByToken();
+  }, []);
+
+  useEffect(async()=>{
+    await findUserByToken();
+    setChange(false)
+  }, [change]);
+
+  const findUserByToken = async() =>{
+   await instance.get('user/valid')
+      .then(res=>{
+
+        console.log(res.data.data);
+        if (res.data.status){
+           setUser(res.data.data);
+           setReady(true);
+        }
+      })
+      .catch((error)=>{
+          console.log('error con', error)
+      });
+  };
+
+  const [user, setUser] = useState(useObject)
+
+  const useObject = {
+    email: '',
+    password: '',
+    role: {},
+    person:{
+      name: '',
+      lastname: '',
+      surname: '',
+    },
+    photo: '',
+  };
+
+  console.log({user})
 
   const deleteAccount = async () => {
    
     try {
-      await AsyncStorage.removeItem('@storage_key')
-      await AsyncStorage.clear()
-      console.log('BIEN REMOVE')
-      setUserInfo([])
+      await AsyncStorage.clear
+      await AsyncStorage.removeItem('token')
       return true
     } catch (e) {
       return false
@@ -27,8 +70,8 @@ const UserScreen = ({navigation, setStateUser, userInfo, conter, setUserInfo}) =
       console.log('error')
     }
 }
-
-
+if (!ready) return <Loading isVisible = {true} text = {'Cargando...'}/>
+if (ready){
   return (
     <ScrollView>
       <View style = {{justifyContent : "center", alignItems : "center", marginTop : 15}}>
@@ -37,24 +80,30 @@ const UserScreen = ({navigation, setStateUser, userInfo, conter, setUserInfo}) =
         rounded
           size={'large'}
           showEditButton
-          source={userInfo != null ? {uri : userInfo.picture.large}: require('../../assets/userprofile.png')}
+          source={user.photo !== '' ? {uri : user.photo}: require('../../assets/userprofile.png')}
+          // source={require('../../assets/userprofile.png')}
           >
           {/* <Avatar.Accessory size={24} onPress={()=>console.log('editar perfil')}/> */}
         </Avatar>
         {/* <Text style={styles.text}>{userInfo.results[conter].name.first} {userInfo.results[conter].name.last}</Text>
         <Text style={styles.email}>{userInfo.results[conter].email} </Text> */}
-        <Text style={styles.text}>{userInfo.name.first} {userInfo.name.last}</Text>
-        <Text style={styles.email}>{userInfo.email} </Text>
+        <Text style={styles.text}>{user.person.name} {user.person.lastname} {user.person.surname}</Text>
+        <Text style={styles.email}>{user.email} </Text>
 
         </View>
-        <TouchableOpacity style={styles.bottomStyle}  onPress = {()=>navigation.navigate('editProfileStack')}>
+        <TouchableOpacity style={styles.bottomStyle}  onPress = {()=>navigation.navigate('editProfileStack', {
+          userInfo : user,
+          change : setChange
+        })} >
           <Text style = {{textAlign : "center", fontSize : 15, justifyContent : "center",fontWeight : "600",}}>Editar Perfil</Text>
         </TouchableOpacity>
 
-        <Button title={'Ver Usuario'} onPress={()=> catchData()}></Button>
-        <Button title = 'LogOUT' containerStyle = {{borderRadius : 15, marginHorizontal : 15, marginTop : 30}} titleStyle = {{fontWeight : "bold"}} buttonStyle = {{backgroundColor : '#0BD57B'}} onPressIn = {() => (setStateUser(false), deleteAccount())}></Button>
+        {/* <Button title={'Ver Usuario'} onPress={()=> catchData()}></Button> */}
+        <Button title = 'LogOUT' containerStyle = {{borderRadius : 15, marginHorizontal : 15, marginTop : 30}} titleStyle = {{fontWeight : "bold"}} buttonStyle = {{backgroundColor : '#0BD57B'}} onPressIn = {() => (setisLogin(false), deleteAccount())}></Button>
     </ScrollView>
-  );
+  )
+}
+  ;
 };
 
 export default UserScreen;

@@ -55,7 +55,7 @@ export const FormRegisterUser = ({navigation}) => {
 
   const registerNewUser = async (inputValor) => {
     try {
-        const result = await axios.post('http://192.168.0.20:8090/user/save', {
+        const result = await axios.post('http://192.168.111.214:8090/user/save', {
             email : inputValor.email,
             password : inputValor.password,
             status : true,

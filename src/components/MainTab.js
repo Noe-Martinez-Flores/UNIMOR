@@ -37,6 +37,7 @@ function StackHome() {
     <Stack.Navigator>
       <Stack.Screen name="mainHome" component={Home} options={{headerTitle : "Inicio"}}/>
       <Stack.Screen name="infoPressArea" component={InfoPressAreaScreen} options= {{headerTitle : "Información"}}/>
+      <Stack.Screen name="profileStack" component={Profile} options= {{headerTitle : "Perfil"}}/>
     </Stack.Navigator>
   )
 }
@@ -47,6 +48,7 @@ function StackSearch() {
     <Stack.Navigator>
       <Stack.Screen name="searchStack" component={Search} options={{headerTitle : "Busqueda" }}/>
       <Stack.Screen name="infoPressArea" component={InfoPressAreaScreen} options= {{headerTitle : "Información"}}/>
+      <Stack.Screen name="profileStack" component={Profile} options= {{headerTitle : "Perfil"}}/>
     </Stack.Navigator>
   )
 }
@@ -56,6 +58,7 @@ function StackFavourite() {
     <Stack.Navigator>
       <Stack.Screen name="favouriteStack" component={Favourite} options={{headerTitle : "Favoritos" }}/>
       <Stack.Screen name="infoPressArea" component={InfoPressAreaScreen} options= {{headerTitle : "Información"}}/>
+      <Stack.Screen name="profileStack" component={Profile} options= {{headerTitle : "Perfil"}}/>
     </Stack.Navigator>
   )
 }
@@ -65,6 +68,7 @@ function StackTop() {
     <Stack.Navigator>
       <Stack.Screen name="topStack" component={Top} options={{headerTitle : "Top-5" }}/>
       <Stack.Screen name="infoPressArea" component={InfoPressAreaScreen} options= {{headerTitle : "Información"}}/>
+      <Stack.Screen name="profileStack" component={Profile} options= {{headerTitle : "Perfil"}}/>
     </Stack.Navigator>
   )
 }

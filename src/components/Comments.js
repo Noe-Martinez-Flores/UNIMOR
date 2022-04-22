@@ -1,31 +1,35 @@
 import { StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, Input, Overlay, Rating } from "react-native-elements";
 import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import instance from "../util/axios";
 
-export default function Comments({ data }) {
+export default function Comments({ data, navigation, company, change}) {
   const [visible, setVisible] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setCommnet] = useState('');
 
+
+  console.log({rating,comment})
   const toggleOverLay = () => {
     setVisible(!visible);
   };
 
+  const [isLogin, setisLogin] = useState(false);
 
-  const datos = [
-    {
-      name: "usuario1",
-      comentario: "Es un buen Lugar",
-    },
-    {
-      name: "usuario2",
-      comentario: "Es un buen Lugar",
-    },
-    {
-      name: "usuario3",
-      comentario: "Es un buen Lugar",
-    },
-  ];
+  useEffect(() => {
+    getData();
+  }, [])
 
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('token')
+      return jsonValue !== null ? (console.log(jsonValue), setisLogin(true)) : (setisLogin(false));
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const modal = () => {
     return (
@@ -34,6 +38,29 @@ export default function Comments({ data }) {
       </Overlay>
     );
   };
+
+  const validateComment = () => {
+    instance.get('comment/valid/' + company.id)
+      .then(res=>{
+        console.log('COMMENT', res.data.data != null);
+        setCommentExist(res.data.data != null);
+      })
+      .catch(err=>{
+        setCommentExist(false);
+      });
+  };
+
+  const submitComment = () => {
+    console.log({rating, comment});
+    instance.post('comment/save/'+company.id,{comment,rating : rating})
+    .then(res=>{
+      toggleOverLay();
+      change(true);
+    }).catch(err=>{
+      toggleOverLay();
+  })
+  }
+
 
   const Base = (item, index) => {
     return (
@@ -61,6 +88,10 @@ export default function Comments({ data }) {
       </View>
     );
   };
+
+  console.log("-----------------------------------------")
+
+  console.log("-----------------------------------------")
   return (
     <View style={styles.container}>
       <View>
@@ -86,8 +117,7 @@ export default function Comments({ data }) {
           onPress={toggleOverLay}
           containerStyle={{ borderRadius: 15 }}
         />
-
-        <Overlay
+        {isLogin ? (<Overlay
           isVisible={visible}
           overlayStyle={styles.modal}
           onBackdropPress={toggleOverLay}
@@ -95,14 +125,30 @@ export default function Comments({ data }) {
           <Text style={{ fontWeight: "bold", fontSize: 20, marginBottom: 5 }}>
             Calificación
           </Text>
-          <Rating imageSize={35}></Rating>
+
+          <Rating imageSize={35} onFinishRating={setRating}></Rating>
           {/* <Text style = {{fontWeight : 'bold', fontSize : 20, marginVertical : 5}}>Comentario</Text> */}
           <Input
             placeholder="Escriba un Comentario"
             style={{ marginVertical: 2 }}
+            onChange={(event) => setCommnet(event.nativeEvent.text)}
           ></Input>
-          <Button icon = {<MaterialIcons name="send" size={24} color = {'white'} style = {{marginEnd : 5}}></MaterialIcons>} title = {'Enviar'} containerStyle = {{borderRadius : 10}}></Button>
-        </Overlay>
+          <Button icon={<MaterialIcons name="send" size={24} color={'white'} style={{ marginEnd: 5 }}></MaterialIcons>} title={'Enviar'} containerStyle={{ borderRadius: 10 }} onPress={submitComment}></Button>
+        </Overlay>) : (<Overlay
+          isVisible={visible}
+          overlayStyle={styles.modal}
+          onBackdropPress={toggleOverLay}
+        >
+          <Text style={{ fontWeight: "bold", fontSize: 20, marginBottom: 5 }}>
+            Para Comentar Inicia Sesíon
+          </Text>
+
+
+          {/* <Text style = {{fontWeight : 'bold', fontSize : 20, marginVertical : 5}}>Comentario</Text> */}
+
+          <Button icon={<MaterialIcons name="login" size={24} color={'white'} style={{ marginEnd: 5, }}></MaterialIcons>} title={'Login / Registrate'} containerStyle={{ borderRadius: 10, marginBottom: 5 }} onPress={() => navigation.navigate("profileStack")}></Button>
+        </Overlay>)}
+
       </View>
 
       <View
@@ -138,7 +184,7 @@ export default function Comments({ data }) {
                 <Avatar
                   rounded
                   size={"medium"}
-                  source={require("../../assets/userprofile.png")}
+                  source={item.user.photo !== "" ? {uri : item.user.photo} :require("../../assets/userprofile.png")}
                 ></Avatar>
               </View>
               <View style={{ width: 300 }}>
